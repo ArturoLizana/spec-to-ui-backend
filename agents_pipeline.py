@@ -1,8 +1,8 @@
 import os
 import re
 from google import genai
-from google.genai import types # type: ignore
-from google.genai.errors import ServerError # type: ignore
+from google.genai import types  # type: ignore
+from google.genai.errors import ServerError  # type: ignore
 
 
 MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3-flash-preview")
@@ -12,7 +12,10 @@ def get_client() -> genai.Client:
     api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("Aucune clé GOOGLE_API_KEY ou GEMINI_API_KEY trouvée dans l'environnement.")
-    return genai.Client(api_key=api_key)
+    return genai.Client(
+        api_key=api_key,
+        http_options=types.HttpOptions(api_version="v1beta"),
+    )
 
 
 def _clean_html(raw: str) -> str:
